@@ -286,7 +286,7 @@ class Base:
 			('Save', gtk.STOCK_SAVE, _('_Save Image'), None, None, self.save_image),
 			('Save As', gtk.STOCK_SAVE_AS, _('Save Image _As...'), '<Ctrl><Shift>S', None, self.save_image_as),
 			('Copy', gtk.STOCK_COPY, _('Copy to Clipboard...'), '<Ctrl>C', None, self.copy_to_clipboard),
-			('Crop', None, _('C_rop...'), None, _('Crop Image'), self.crop_image),
+			('Crop', None, _('C_rop...'), '<Ctrl>E', _('Crop Image'), self.crop_image),
 			('Resize', None, _('R_esize...'), '<Ctrl>R', _('Resize Image'), self.resize_image),
 			('Saturation', None, _('_Saturation...'), None, _('Modify saturation'), self.saturation),
 			('Quit', gtk.STOCK_QUIT, None, None, None, self.exit_app),
