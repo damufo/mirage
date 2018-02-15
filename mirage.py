@@ -1448,6 +1448,8 @@ class Base:
 		return
 
 	def save_settings(self):
+		self.usettings['window_width'] = self.window.allocation.width
+		self.usettings['window_height'] = self.window.allocation.height
 		# Save the config as json
 		if not os.path.exists(self.config_dir):
 			os.makedirs(self.config_dir)
