@@ -147,6 +147,7 @@ class Base:
 		self.usettings['bgcolor'] = {'r':0, 'g':0, 'b': 0}
 		self.usettings['thumbnail_size'] = 128	# Default to 128 x 128
 		self.usettings['start_in_fullscreen'] = False
+		self.usettings['crop_window_size'] = 400
 
 		# Settings, Slideshow
 		self.usettings['slideshow_delay'] = 1	# seconds
@@ -2461,6 +2462,12 @@ class Base:
 				thumbsize.set_active(option)
 			option += 1
 		thumbbox.pack_start(thumbsize, False, False, 5)
+		hbox_crop = gtk.HBox()
+		hbox_crop.pack_start(gtk.Label(_("Crop window size:")), False, False, 0)
+		crop_spin_adj = gtk.Adjustment(self.usettings['crop_window_size'], 400, 800, 1, 10, 0)
+		crop_spin = gtk.SpinButton(crop_spin_adj, 1.0, 0)
+		crop_spin.set_numeric(True)
+		hbox_crop.pack_start(crop_spin, False, False, 5)
 		table_settings.attach(gtk.Label(), 1, 3, 1, 2, gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 0, 0)
 		table_settings.attach(bglabel, 1, 3, 2, 3, gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 15, 0)
 		table_settings.attach(gtk.Label(), 1, 3, 3, 4, gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 0, 0)
@@ -2470,6 +2477,7 @@ class Base:
 		table_settings.attach(thumbbox, 1, 3, 7, 8, gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 30, 0)
 		table_settings.attach(gtk.Label(), 1, 3, 8, 9,  gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 30, 0)
 		table_settings.attach(fullscreen, 1, 3, 9, 10,  gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 30, 0)
+		table_settings.attach(hbox_crop, 1, 3, 10, 11,  gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 30, 0)
 		table_settings.attach(gtk.Label(), 1, 3, 10, 11, gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 30, 0)
 		table_settings.attach(gtk.Label(), 1, 3, 11, 12,  gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 30, 0)
 		table_settings.attach(gtk.Label(), 1, 3, 12, 13,  gtk.FILL|gtk.EXPAND, gtk.FILL|gtk.EXPAND, 30, 0)
@@ -2702,6 +2710,7 @@ class Base:
 			self.curr_slideshow_random = self.usettings['slideshow_random']
 			self.usettings['disable_screensaver'] = disable_screensaver.get_active()
 			self.usettings['slideshow_in_fullscreen'] = ss_in_fs.get_active()
+			self.usettings['crop_window_size'] = crop_spin.get_value_as_int()
 			self.usettings['savemode'] = savecombo.get_active()
 			self.usettings['start_in_fullscreen'] = fullscreen.get_active()
 			self.usettings['confirm_delete'] = deletebutton.get_active()
@@ -3300,7 +3309,7 @@ class Base:
 		cropimage.set_from_stock(gtk.STOCK_OK, gtk.ICON_SIZE_BUTTON)
 		cropbutton.set_image(cropimage)
 		image = gtk.DrawingArea()
-		crop_pixbuf, image_width, image_height = self.get_pixbuf_of_size(self.currimg.pixbuf_original, 400, self.zoom_quality)
+		crop_pixbuf, image_width, image_height = self.get_pixbuf_of_size(self.currimg.pixbuf_original, self.usettings['crop_window_size'], self.zoom_quality)
 		image.set_size_request(image_width, image_height)
 		hbox = gtk.HBox()
 		hbox.pack_start(gtk.Label(), expand=True)
