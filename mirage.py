@@ -1257,6 +1257,7 @@ class Base:
 		self.UIManager.get_widget('/MainToolbar/Fit').set_sensitive(enable)
 		self.UIManager.get_widget('/Popup/1:1').set_sensitive(enable)
 		self.UIManager.get_widget('/Popup/Fit').set_sensitive(enable)
+		self.UIManager.get_widget('/MainMenu/FileMenu/Reload').set_sensitive(enable)
 		self.UIManager.get_widget('/MainMenu/FileMenu/Save As').set_sensitive(enable)
 		self.UIManager.get_widget('/MainMenu/FileMenu/Save').set_sensitive(False)
 		self.UIManager.get_widget('/MainMenu/FileMenu/Properties').set_sensitive(False)

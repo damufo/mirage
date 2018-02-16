@@ -1,4 +1,5 @@
     Febrary 16, 2018
+    + Bug: Enable Reload menu, only when exists image loaded
     + Bug: Enable save menu when image is modified
     + Bug: resize and crop
     
