@@ -1264,8 +1264,8 @@ class Base:
 		if self.image_list:
 			try:
 				self.UIManager.get_widget('/MainMenu/FileMenu/Properties').set_sensitive(True)
-				if self.currimg.writable_format():
-					self.UIManager.get_widget('/MainMenu/FileMenu/Save').set_sensitive(enable)
+				if self.currimg.writable_format() and self.image_modified:
+					self.UIManager.get_widget('/MainMenu/FileMenu/Save').set_sensitive(True)
 			except:
 				self.UIManager.get_widget('/MainMenu/FileMenu/Save').set_sensitive(False)
 		if self.actionGroupCustom:
@@ -1593,6 +1593,8 @@ class Base:
 				# Update thumbnail:
 				gobject.idle_add(self.thumbpane_set_image, dest_name, self.curr_img_in_list, True)
 				self.image_modified = False
+				# Disable menú Save
+				self.UIManager.get_widget('/MainMenu/FileMenu/Save').set_sensitive(False)
 			else:
 				error_dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO, _('The %s format is not supported for saving. Do you wish to save the file in a different format?') % filetype)
 				error_dialog.set_title(_("Save"))
@@ -1616,11 +1618,22 @@ class Base:
 		# Never call this function from an idle or timeout loop! That will cause
 		# the app to freeze.
 		if self.image_modified:
-			if self.usettings['savemode'] == 1:
+			# Ignore changes and reload original (= Prompt for action + No)
+			if self.usettings['savemode'] == 0:
+					self.image_modified = False
+					# Ensures that we don't use the current pixbuf for any preload pixbufs if we are in
+					# the process of loading the previous or next image in the list:
+					self.currimg.pixbuf = self.currimg.pixbuf_original
+					self.nextimg.index = -1
+					self.previmg.index = -1
+					self.loaded_img_in_list = -1
+			# Auto-save
+			elif self.usettings['savemode'] == 1:
 				temp = self.UIManager.get_widget('/MainMenu/FileMenu/Save').get_property('sensitive')
 				self.UIManager.get_widget('/MainMenu/FileMenu/Save').set_property('sensitive', True)
 				self.save_image(None)
 				self.UIManager.get_widget('/MainMenu/FileMenu/Save').set_property('sensitive', temp)
+			# Prompt for action
 			elif self.usettings['savemode'] == 2:
 				dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_QUESTION, gtk.BUTTONS_NONE, _("The current image has been modified. Save changes?"))
 				dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
@@ -4689,7 +4702,7 @@ class ImageData:
 	def writable_format(self):
 		if not self.isloaded:
 			return False
-		self.fileinfo['is_writable']
+		return self.fileinfo['is_writable']
 
 	def zoom_pixbuf(self, zoomratio, quality, colormap):
 		# Always start with the original image to preserve quality!
