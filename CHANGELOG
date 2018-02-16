@@ -1,3 +1,11 @@
+    Febrary 15, 2018
+    + Bug: resize and crop
+    
+    Febrary 15, 2018
+    + Bug: When exit save last height and size
+    + Added Option Crop window size (Preferences->Interface)
+    + Added Crop shortcut
+    
 v1.0 - future
 	+ Fixed bug with missing icons in slideshow controls
 

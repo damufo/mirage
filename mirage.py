@@ -3395,9 +3395,9 @@ class Base:
 			if self.rect != None:
 				self.currimg.crop(self.coords)
 				gc.collect()
-				self.put_zoom_image_to_window(False)
-				# self.load_new_image2(False, True, False, False)
+				self.zoom_check_and_execute(None, False, False)
 				self.image_modified = True
+				self.set_image_sensitivities(True)
 		else:
 			dialog.destroy()
 
@@ -3607,9 +3607,9 @@ class Base:
 			pixelwidth = width.get_value_as_int()
 			dialog.destroy()
 			self.currimg.resize(pixelwidth, pixelheight, self.zoom_quality)
-			self.put_zoom_image_to_window(False)
-			# self.load_new_image2(False, True, False, False)
+			self.zoom_check_and_execute(None, False, False)
 			self.image_modified = True
+			self.set_image_sensitivities(True)
 		else:
 			dialog.destroy()
 
