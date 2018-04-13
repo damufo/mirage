@@ -3249,6 +3249,10 @@ class Base:
 	def rotate_right(self, action):
 		self.rotate_left_or_right('/MainMenu/EditMenu/Rotate Right', 270)
 
+	def set_image_modified(self):
+		self.image_modified = True
+		self.set_image_sensitivities(True)
+
 	def rotate_left_or_right(self, widgetname, angle):
 		if self.currimg.isloaded and self.UIManager.get_widget(widgetname).get_property('sensitive'):
 			self.currimg.rotate_pixbuf(angle)
@@ -3263,7 +3267,7 @@ class Base:
 				self.show_scrollbars_if_needed()
 				self.center_image()
 				self.update_statusbar()
-			self.image_modified = True
+			self.set_image_modified()
 
 	def flip_image_vert(self, action):
 		self.flip_image_vert_or_horiz(('/MainMenu/EditMenu/Flip Vertically'), True)
@@ -3275,7 +3279,7 @@ class Base:
 		if self.currimg.isloaded and self.UIManager.get_widget(widgetname).get_property('sensitive'):
 			self.currimg.flip_pixbuf(vertical)
 			self.imageview.set_from_pixbuf(self.currimg.pixbuf)
-			self.image_modified = True
+			self.set_image_modified()
 
 	def copy_to_clipboard(self, action):
 		"""Copies the currently viewed image to the clipboard"""
@@ -3410,8 +3414,7 @@ class Base:
 				self.currimg.crop(self.coords)
 				gc.collect()
 				self.zoom_check_and_execute(None, False, False)
-				self.image_modified = True
-				self.set_image_sensitivities(True)
+				self.set_image_modified()
 		else:
 			dialog.destroy()
 
@@ -3541,7 +3544,7 @@ class Base:
 		if response == gtk.RESPONSE_ACCEPT:
 			self.currimg.saturation(scale.get_value())
 			self.imageview.set_from_pixbuf(self.currimg.pixbuf)
-			self.image_modified = True
+			self.set_image_modified()
 			dialog.destroy()
 		else:
 			self.imageview.set_from_pixbuf(self.currimg.pixbuf)
@@ -3622,8 +3625,8 @@ class Base:
 			dialog.destroy()
 			self.currimg.resize(pixelwidth, pixelheight, self.zoom_quality)
 			self.zoom_check_and_execute(None, False, False)
-			self.image_modified = True
-			self.set_image_sensitivities(True)
+			self.set_image_modified()
+
 		else:
 			dialog.destroy()
 
